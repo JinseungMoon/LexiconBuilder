@@ -1,10 +1,11 @@
-import urllib2
+import requests
 from bs4 import BeautifulSoup
 
 # open url and extact html object(soup)
 def getSoup( url ):
-    html = urllib2.urlopen(url).read()
-    soup = BeautifulSoup(html, "lxml")
+    # html = urllib2.urlopen(url).read().encode('ascii','ignore')
+    page = requests.get(url).text
+    soup = BeautifulSoup(page, "lxml")
     return soup
 
 
@@ -18,8 +19,8 @@ def getHrefs( elements, tag, classAtr):
 
 
 # get links of a term as string type
-def getTermLinks( idx ):
-    baseUrl = ('http://www.investopedia.com/terms/' + idx + '/')
+def getTermLinks( letter ):
+    baseUrl = ('http://www.investopedia.com/terms/' + letter + '/')
     pageContent = getSoup(baseUrl).body.find("div", class_="layout-page")
     print("url: %s") % (baseUrl)
 
@@ -30,12 +31,12 @@ def getTermLinks( idx ):
     if lastPage == None:
         pageCount = 1
     else:
-        pageCount = int(lastPage.get("href").lstrip("terms/" + idx + "?page="))
+        pageCount = int(lastPage.get("href").lstrip("terms/" + letter + "?page="))
 
     for pageNum in xrange(1,pageCount+1):
         if pageNum != 1:
             #(e.g)http://www.investopedia.com/terms/a/?page=13 for term 'A'
-            pageUrl = ('http://www.investopedia.com/terms/' + idx + '/?page=' + str(pageNum))
+            pageUrl = ('http://www.investopedia.com/terms/' + letter + '/?page=' + str(pageNum))
             pageContent = getSoup(pageUrl).body.find("div", class_="layout-page")
             # print("url: %s") % (pageUrl)
             print("."),
