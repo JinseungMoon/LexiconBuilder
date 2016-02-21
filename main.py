@@ -2,66 +2,84 @@
 import etr
 import string
 import os
+import codecs
+from datetime import datetime
 
-idxList = str('1') + string.lowercase[:26] # 1 for #
-#idxList = str('1')
+# initial properties
+baseUrl = "http://www.investopedia.com"
+#letterList = '1abcdefghijklmnopqrstuvwxyz'
+letterList = '1'
 termLinks = list()
 
-
 # extract links from each letter("#~Z")
-# for termIdx in idxList:
-#     termLinks.append(etr.getTermLinks(termIdx))
+for termIdx in letterList:
+    termLinks.append(etr.getTermLinks(termIdx))
 
-
-# print all data
+# write all data into separate txt file
 totalCount = 0
-# for i in xrange(len(idxList)):
-termCount = 0
+warnCount = 0
+outDir = os.getcwd() + "/out/"
 
-# for termLink in termLinks[i]:
+for i in xrange(len(letterList)):
+	termCount = 0
+	for termLink in termLinks[i]:
 
-# termUrl = ("http://www.investopedia.com"+ termLink)
-termUrl = ("http://www.investopedia.com/terms/a/aging-schedule.asp")
+		termUrl = baseUrl + termLink
+		#termUrl = "http://www.investopedia.com/terms/a/aging-schedule.asp"
 
-print "\n\n--------------------------------------------------------------------------------"
-print "%s" % (termUrl)
-print "--------------------------------------------------------------------------------"
+		print "\n\n--------------------------------------------------------------------------------"
+		print "%s" % (termUrl)
+		print "--------------------------------------------------------------------------------"
 
- # extract definition and break down of term
-termContentElements = etr.getSoup(termUrl).find("div", id="Content") # element of id="Content"
-termDefElement = termContentElements.find("div", class_="content-box content-box-term").p 
+		# write on a txt file
+		filePath = outDir + termUrl[len(baseUrl)+1:].rstrip(".asp") + ".txt"
+		linkfilePath = filePath.rstrip(".txt") + "_RT.txt"
 
-# write on a txt file
-curDir = os.getcwd()
-filePath = curDir + "/data" + termUrl.lstrip("http://www.investopedia.com/terms/").rstrip(".asp") + ".txt"
-linkfilePath = filePath.rstrip(".txt") + "_RT.txt"
+		targetDir = os.path.dirname(filePath)
+		if not os.path.exists(targetDir):
+		    os.makedirs(targetDir)
 
-targetDir = os.path.dirname(filePath)
-if not os.path.exists(targetDir):
-    os.makedirs(targetDir)
-
-f = open(filePath, 'w')
-fl = open(linkfilePath, 'w')
-
-f.write("[Definition]\n")
-f.write(termDefElement.text.encode('utf-8'))
-
-f.write("\n\n[Break Down]\n")
-f.write(termDefElement.find_next_siblings('p')[0].text.encode('utf-8'))
-
-# print "\n[Links]"
-relatedLinks = etr.getHrefs(termContentElements, "div", "box below-box col-2 no-image gray clear")
-for link in relatedLinks:
-    # print link
-    fl.write(link + '\n')
-
-termCount += len(termLinks)
-f.close()
-fl.close()
-print '\'' + filePath + '\'' + ' completed'
-print '\'' + linkfilePath + '\''+ ' completed'
-
-#print ("total number pages from alphabet '%s' = %d\n") % (idxList[i], termCount)
+		f = codecs.open(filePath, encoding='utf-8', mode='w')
+		fl = codecs.open(linkfilePath, encoding='utf-8', mode='w')
 
 
-print "total number of pages extracted = %d" % totalCount
+		 # extract definition and break down of term
+		termContentElements = etr.getSoup(termUrl).find("div", id="Content") # element of id="Content"
+		termDefElements = termContentElements.find("div", class_="content-box content-box-term").find_all('p') 
+
+		if len(termDefElements) <= 1:
+			print '[Warnning]"%s" has invalid Html format\n' % (termUrl)
+			warnCount += 1
+
+		for num in xrange(len(termDefElements)):
+			if num == 0:
+				f.write("[Definition]\n")
+				f.write(termDefElements[0].text)
+			elif num == 1:	
+				f.write("\n\n[Break Down]\n")
+				f.write(termDefElements[1].text)
+
+
+		relatedLinks = etr.getHrefs(termContentElements, "div", "box below-box col-2 no-image gray clear")
+		for link in relatedLinks:
+		    fl.write(link + '\n')
+
+		termCount += len(termLinks)
+		totalCount += termCount
+		f.close()
+		fl.close()
+		
+		print '\'' + filePath + '\'' + ' completed'
+		print '\'' + linkfilePath + '\''+ ' completed'
+	
+	print ("total number pages from letter '%s' = %d\n") % (letterList[i], termCount)
+
+# write log data
+logf = codecs.open(outDir + 'log.txt', encoding='utf-8', mode='a')
+logf.write(str(datetime.now()))
+for letter in letterList[i]:
+	logf.write("[%s: %d] " % (letter.upper(), termCount)) 
+logf.write("\n# of Pages: %d" % totalCount)
+logf.write("\n# of Warnnings: %d\n\n" % warnCount)
+logf.write("--------------------------------------------------------------------")
+logf.close()
