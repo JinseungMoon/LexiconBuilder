@@ -4,7 +4,6 @@ import codecs
 import requests
 import Queue
 import threading
-import time
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -19,7 +18,6 @@ lock = threading.Lock()
 dictionary = list()
 fetchedCount = 0
 totalCount = 0
-warnCount = 0
 ###########https://docs.python.org/2/howto/logging.html
 
 # -----------------------------------------------------------------------------------
@@ -100,31 +98,22 @@ def extractContent(idx):
 			continue
 
 		tags = content.find_all(['h2','p'])
-		hIdx = 0  # head index
-		pIdx = 0  # paragraph index
-		pCharCounts = 0  # counts of characters in a paragraph
+		charCount = 0  # counts of characters in a paragraph
 		for tag in tags:
 
-			if len(tags) <= 1:
-				logf.write(str('[Invalid Format#2!]' + termLink + '\n'))
-				with lock:
-					global warnCount
-					warnCount += 1
-
 			if tag.name == 'h2':
-				pIdx = 0
-				hIdx += 1
-				f.write('\n[' + tag.text + ']\n' )
-			if tag.name == 'p':
-				pIdx += 1
-				pCharCounts = len(tag.text)
-				f.write(tag.text)
-				f.write('counts:%d\n' % pCharCounts )
+				headText = '[ %s ]\n' % tag.text 
+				f.write(headText)
+				charCount += len(headText)
+			elif tag.name == 'p':
+				paraText = '%s\n' % tag.text
+				f.write(paraText)
+				charCount += len(paraText)
 				anchors = tag.find_all('a')
 				for anchor in anchors:
-					idxStart = tag.text.find(anchor.text)
-					al.write('[head#%d:para#%d(%d)]' % (hIdx, pIdx, pCharCounts) )
-					al.write(anchor.text + ' ' + unicode(anchor.get("href")) + ' ' + str(idxStart) + '\n')
+					idxStart = charCount + tag.text.find(anchor.text)
+					anchorText = "%s  %s  %d\n" % (anchor.text, anchor.get("href"), idxStart)
+					al.write(anchorText)
 
 		
 		# extract related links
@@ -159,7 +148,7 @@ def worker2():
 q = Queue.Queue()
 q2 = Queue.Queue()
 num_worker_threads = 26
-logf = codecs.open(outDir + 'log.txt', encoding='utf-8', mode='a')
+logf = codecs.open(outDir + 'log.txt', encoding='utf-8', mode='wa')
 
 for i in range(num_worker_threads):
      t = threading.Thread(target=worker)
@@ -185,12 +174,3 @@ q2.join()
 # print out result
 print "\n# of fetched Pages: %d" % fetchedCount
 print "# of Witten Pages: %d" % totalCount
-print "# of Warnnings: %d\n\n" % warnCount
-
-# write result data
-logf.write("--------------------------------------------------------------------\n")
-logf.write(str(datetime.now())+'\n')
-logf.write("\n# of fetched Pages: %d" % fetchedCount)
-logf.write("\n# of Witten Pages: %d" % totalCount)
-logf.write("\n# of Warnnings: %d\n\n" % warnCount)
-logf.close()
