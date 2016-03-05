@@ -1,0 +1,7 @@
+org.apache.lucene.bkdtree
+org.apache.lucene.codecs.idversion
+org.apache.lucene.payloads
+org.apache.lucene.rangetree
+org.apache.lucene.sandbox.queries
+org.apache.lucene.sandbox.queries.regex
+org.apache.lucene.search
