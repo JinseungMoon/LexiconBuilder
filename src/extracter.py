@@ -184,9 +184,6 @@ q2.join()
 flt = codecs.open(outDir + 'termlist.json', encoding='utf-8', mode='w+b')
 json.dump(termList, flt)
 
-# for term in termList:
-	# flt.write(term[0] + '\t' + term[1] + '\n')
-
 flt.close()
 
 
