@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src"/>
+	<classpathentry excluding="out/" kind="src" path="src"/>
 	<classpathentry kind="lib" path="3rdParty/lucene-5.5.0/analysis/common/lucene-analyzers-common-5.5.0.jar"/>
 	<classpathentry kind="lib" path="3rdParty/lucene-5.5.0/analysis/icu/lib/icu4j-54.1.jar"/>
 	<classpathentry kind="lib" path="3rdParty/lucene-5.5.0/analysis/icu/lucene-analyzers-icu-5.5.0.jar"/>
@@ -62,5 +62,6 @@
 	<classpathentry kind="lib" path="3rdParty/lucene-5.5.0/test-framework/lib/randomizedtesting-runner-2.3.2.jar"/>
 	<classpathentry kind="lib" path="3rdParty/lucene-5.5.0/test-framework/lucene-test-framework-5.5.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="3rdParty/json-simple-1.1.1/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

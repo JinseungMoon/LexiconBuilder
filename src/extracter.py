@@ -2,6 +2,7 @@
 import os
 import codecs
 import requests
+import json
 import Queue
 import threading
 from bs4 import BeautifulSoup
@@ -11,11 +12,13 @@ from datetime import datetime
 # ------------Global variables
 # -----------------------------------------------------------------------------------
 baseUrl = "http://www.investopedia.com"
-letterList = '1abcdefghijklmnopqrstuvwxyz'
-# letterList = '1'
+# letterList = '1abcdefghijklmnopqrstuvwxyz'
+letterList = '1'
+os.chdir("../")
 outDir = os.getcwd() + "/out/"
 lock = threading.Lock()
 dictionary = list()
+termList = []
 fetchedCount = 0
 totalCount = 0
 ###########https://docs.python.org/2/howto/logging.html
@@ -68,17 +71,14 @@ def extractContent(idx):
  	for termLink in dictionary[idx]:
 
 		termUrl = baseUrl + termLink
-		# termUrl = "http://www.investopedia.com/terms/a/above-the-line-cost.asp"
+		# termUrl = "http://www.investopedia.com/terms/f/financial-account.asp"
 		
-		# print termUrl
-		#print termUrl
-
 		# write on a txt file
 		filePath = outDir + termUrl[len(baseUrl)+1:].replace('.asp', '.txt')
 		anchorFilePath = filePath.replace('.txt', '_IL.txt')
 		linkFilePath = filePath.replace('.txt', '_RT.txt')
 
-		print filePath
+		# print filePath
 
 		targetDir = os.path.dirname(filePath)
 		if not os.path.exists(targetDir):
@@ -86,7 +86,7 @@ def extractContent(idx):
 
 		f = codecs.open(filePath, encoding='utf-8', mode='w')
 		al = codecs.open(anchorFilePath, encoding='utf-8', mode='w')
-		fl = codecs.open(linkFilePath, encoding='utf-8', mode='w')
+		# fl = codecs.open(linkFilePath, encoding='utf-8', mode='w')
 
 		 # extract definition and break down of term
 		soup = getSoup(termUrl)
@@ -97,8 +97,13 @@ def extractContent(idx):
 			# logf.write(str('[Invalid Format#1!]' + termLink + '\n'))
 			f.close()
 			al.close()
-			fl.close()
+			# fl.close()
 			continue
+
+		term = soup.h1.text.strip()
+		termList.append({'term' : term, 'url' : termUrl})
+
+		print repr(term) + '\t' + repr(termUrl)
 
 		tags = content.find_all(['h2','p'])
 		charCount = 0  # counts of characters in a paragraph
@@ -108,6 +113,7 @@ def extractContent(idx):
 				headText = '[ %s ]\n' % tag.text 
 				f.write(headText)
 				charCount += len(headText)
+
 			elif tag.name == 'p':
 				paraText = '%s\n' % tag.text
 				f.write(paraText)
@@ -119,10 +125,10 @@ def extractContent(idx):
 					al.write(anchorText)
 
 		
-		# extract related links
-		relatedLinks = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
-		for relatedLink in relatedLinks:
-		    fl.write(relatedLink.get("href") + '\n')
+		# # extract related links
+		# relatedLinks = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
+		# for relatedLink in relatedLinks:
+		#     fl.write(relatedLink.get("href") + '\n')
 
 		with lock:
 			global totalCount
@@ -130,7 +136,7 @@ def extractContent(idx):
 
 		f.close()
 		al.close()
-		fl.close()
+		# fl.close()
 			
 def worker():
 	    while True:
@@ -164,28 +170,6 @@ for letter in letterList:
 q.join() 
 
 
-# extract term list & sort
-targetDir = os.path.dirname(outDir)
-if not os.path.exists(targetDir):
-    os.makedirs(targetDir)
-
-flt = codecs.open(outDir + 'termlist.txt', encoding='utf-8', mode='w')
-
-termList = []
-
-for idx in xrange(len(dictionary)):
-	for link in dictionary[idx]:
-		termList.append(link[link.rfind("/")+1:].replace('.asp',''))
-				
-termList.sort()
-
-for term in termList:
-	flt.write(term + '\n')
-
-flt.close()
-
-
-
 print "all links are fetched.\n"
 for i in range(num_worker_threads):
 	t = threading.Thread(target=worker2)
@@ -196,6 +180,15 @@ for i in xrange(len(dictionary)):
 	q2.put(i)
 
 q2.join()
+
+flt = codecs.open(outDir + 'termlist.json', encoding='utf-8', mode='w+b')
+json.dump(termList, flt)
+
+# for term in termList:
+	# flt.write(term[0] + '\t' + term[1] + '\n')
+
+flt.close()
+
 
 # print out result
 print "\n# of fetched Pages: %d" % fetchedCount

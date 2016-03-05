@@ -1,9 +1,0 @@
-[ DEFINITION of 'Accumulation/Distribution' ]
-An indicator that tracks the relationship between volume and price. It is often considered a leading indicator because it shows when a stock is being accumulated or distributed, foreshadowing major price moves.
-When the Accumulation/Distribution line is moving in the same direction as the price trend, it confirms the trend. When the Accumulation/Distribution line is moving in the opposite direction of the price trend, it indicates the price trend may not be sustainable.
-The indicator has a three step calculation:
-[ BREAKING DOWN 'Accumulation/Distribution' ]
-The indicator is primarily used to confirm price trends, or spot potential trend changes in price based on divergence with the Accumulation/Distribution line. 
-
-The indicator looks at each period individually, and whether the price closes in the upper or lower portion of the period's (day's) range. This means not all divergences will result in a price trend reversal. Occasionally anomalies will occur where the price is trending lower (higher) but the indicator is rising (falling), because even though the price trend is down, each day the price is finishing in the upper portion of its daily range. High volume days can accentuate this characteristic. 
-Therefore, the indicator is different from other cumulative volume indicators, such as On-Balance Volume (OBV). 

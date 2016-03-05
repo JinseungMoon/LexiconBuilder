@@ -1,0 +1,586 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"sort",
+				"sortedTermList	statement"
+			],
+			[
+				"en",
+				"encode"
+			],
+			[
+				"rep",
+				"replace"
+			],
+			[
+				"in",
+				"index"
+			],
+			[
+				"term",
+				"termlist"
+			],
+			[
+				"out",
+				"outDir	statement"
+			],
+			[
+				"par",
+				"paraText	statement"
+			],
+			[
+				"char",
+				"charCounts	statement"
+			],
+			[
+				"fe",
+				"fetchedCount	statement"
+			],
+			[
+				"ex",
+				"extractContent"
+			],
+			[
+				"ext",
+				"extractContent	function"
+			],
+			[
+				"num",
+				"num_worker_threads"
+			],
+			[
+				"ta",
+				"task_done	function"
+			],
+			[
+				"q",
+				"qsize	function"
+			],
+			[
+				"le",
+				"letterList	statement"
+			],
+			[
+				"get",
+				"getTermLinks	function"
+			],
+			[
+				"lett",
+				"letterList	statement"
+			],
+			[
+				"Threa",
+				"ThreadPool	function"
+			],
+			[
+				"Po",
+				"Process	class"
+			],
+			[
+				"di",
+				"dictionary	statement"
+			],
+			[
+				"ini",
+				"initThread	function"
+			],
+			[
+				"da",
+				"datetime	class"
+			],
+			[
+				"wan",
+				"Warnngs"
+			],
+			[
+				"tota",
+				"totalCount	statement"
+			],
+			[
+				"as",
+				"ascii"
+			],
+			[
+				"fi",
+				"fileName"
+			],
+			[
+				"file",
+				"fileName"
+			],
+			[
+				"tot",
+				"totalCount"
+			],
+			[
+				"last",
+				"lastPage"
+			],
+			[
+				"link",
+				"linkElements"
+			],
+			[
+				"linkEl",
+				"linkElements"
+			],
+			[
+				"Link",
+				"linkElements"
+			],
+			[
+				"linkElem",
+				"linkElment"
+			],
+			[
+				"pageCo",
+				"pageCount"
+			],
+			[
+				"termLink",
+				"termLinkTagList"
+			],
+			[
+				"termli",
+				"termLinkList"
+			],
+			[
+				"con",
+				"contentOfTerm	statement"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "etc/algorithm.sl",
+			"settings":
+			{
+				"buffer_size": 176,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Anaconda Python Builder",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Anaconda Python Builder",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Python/Python.sublime-build",
+					""
+				],
+				[
+					"Packages/Python/Python.sublime-build",
+					"Syntax Check"
+				]
+			],
+			[
+				"Packages/Python/Python.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 307.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"remov",
+				"Package Control: Remove Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"remove p",
+				"Package Control: Remove Package"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 521.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '2915d1851351e5ee549c20394736b442' + '8bc59f460fa1548d1514676163dafc88'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/jinseungmoon/Developer/LexiconBuilder"
+	],
+	"file_history":
+	[
+		"/Users/jinseungmoon/Developer/LexiconBuilder/etc/algorithm",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/ref/other_src/add missing links.py",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/ref/other_src/term_extraction.py",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/src/extracter.py",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/main.py",
+		"/Users/jinseungmoon/Downloads/a_credit.data",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/etr.py",
+		"/Users/jinseungmoon/Developer/LexiconBuilder/TermExt.sublime-project",
+		"/Users/jinseungmoon/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/jinseungmoon/Developer/HtmlExtPy/main.py",
+		"/Users/jinseungmoon/Developer/HtmlExtPy/etr.py",
+		"/Users/jinseungmoon/Library/Application Support/Sublime Text 3/Packages/User/python3.sublime-build",
+		"/Users/jinseungmoon/Developer/HtmlExtPy/example2.py",
+		"/Users/jinseungmoon/Developer/HtmlExtPy/example.py",
+		"/Users/jinseungmoon/Downloads/beautifulsoup4-4.4.1/setup.py",
+		"/Users/jinseungmoon/work/repo/html/helloworld.html"
+	],
+	"find":
+	{
+		"height": 26.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"208",
+			"h1",
+			"codec",
+			"logf",
+			"log.",
+			"log",
+			"paraText",
+			"charCounts",
+			"pCharCounts",
+			"linkfilePath",
+			"content",
+			"termDefElements",
+			"fetched.",
+			"n",
+			"funcCount",
+			"warnCount",
+			"fetched",
+			"time.",
+			"termLinks",
+			"termIdx",
+			"etr.",
+			"string",
+			"termDefElements",
+			"daytime",
+			"Page",
+			"page",
+			"()\n",
+			"page",
+			"pageUrl",
+			"pageContent",
+			"getHref",
+			"termContentElements",
+			"print",
+			"WarnngsCount",
+			"fLog",
+			"curDir",
+			"num",
+			"termDefElement",
+			"idx",
+			"idxList",
+			"data",
+			"repr(",
+			"write",
+			"fileName",
+			"FileName",
+			"fileName",
+			"FileName",
+			"fileName",
+			"txt",
+			"termcount",
+			"totalCountOfTerm",
+			"getSoup",
+			"get",
+			"getSoup",
+			"get",
+			"link",
+			"idx",
+			"termIdx",
+			"termLink",
+			"termIdx",
+			"element",
+			"elements",
+			"linkElements",
+			"link",
+			"termLinkTag",
+			"termLinkList",
+			"letter",
+			"dictionary",
+			"termIdx",
+			"extSoup",
+			"contentOfTerm",
+			"link",
+			"termUrl",
+			"termFullUrl",
+			"termUrl",
+			"termLinkList",
+			"termLinkContent",
+			"termLinkListSoup",
+			"termLinkListHtml",
+			"\n#",
+			"# print termLinkContent.find(\"a\", title=\"Go to last page\").get(\"href\").lstrip(\"terms/\" + termIdx + \"?page=\")\n",
+			"term",
+			"termLinkContent",
+			"termLinkListSoup",
+			"termLinkContent",
+			"str",
+			"numb",
+			"¡"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"fetched.",
+			"",
+			"url",
+			"term"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "etc/algorithm.sl",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 176,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								176,
+								176
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"bh_regions":
+							[
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content"
+							],
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 39.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 208.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.git":
+	{
+		"height": 118.0
+	},
+	"pinned_build_system": "",
+	"project": "lexiconbuilder.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
