@@ -67,6 +67,8 @@ def getTermLinks( letter ):
 
     dictionary.append(termLinks)
 
+    return fetchedCount
+
 def extractContent(idx):
  	for termLink in dictionary[idx]:
 
@@ -86,7 +88,7 @@ def extractContent(idx):
 
 		f = codecs.open(filePath, encoding='utf-8', mode='w')
 		al = codecs.open(anchorFilePath, encoding='utf-8', mode='w')
-		# fl = codecs.open(linkFilePath, encoding='utf-8', mode='w')
+		fl = codecs.open(linkFilePath, encoding='utf-8', mode='w')
 
 		 # extract definition and break down of term
 		soup = getSoup(termUrl)
@@ -97,7 +99,7 @@ def extractContent(idx):
 			# logf.write(str('[Invalid Format#1!]' + termLink + '\n'))
 			f.close()
 			al.close()
-			# fl.close()
+			fl.close()
 			continue
 
 		term = soup.h1.text.strip()
@@ -125,24 +127,23 @@ def extractContent(idx):
 					al.write(anchorText)
 
 		
-		# # extract related links
-		# relatedLinks = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
-		# for relatedLink in relatedLinks:
-		#     fl.write(relatedLink.get("href") + '\n')
-
-		with lock:
-			global totalCount
-			totalCount += len(termLink)
+		# extract related links
+		relatedLinks = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
+		for relatedLink in relatedLinks:
+		    fl.write(relatedLink.get("href") + '\n')
 
 		f.close()
 		al.close()
-		# fl.close()
+		fl.close()
 			
 def worker():
-	    while True:
-	        letter = q.get()
-	        getTermLinks(letter)
-	        q.task_done()
+    while True:
+        letter = q.get()
+        fetchedCount = getTermLinks(letter)
+        with lock:
+			global totalCount
+			totalCount += fetchedCount
+        q.task_done()
 
 def worker2():
     while True:
