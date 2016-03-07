@@ -12,13 +12,11 @@ from datetime import datetime
 # ------------Global variables
 # -----------------------------------------------------------------------------------
 baseUrl = "http://www.investopedia.com"
-# letterList = '1abcdefghijklmnopqrstuvwxyz'
-letterList = '1'
-os.chdir("../")
-outDir = os.getcwd() + "/out/"
+letterList = '1abcdefghijklmnopqrstuvwxyz'
 lock = threading.Lock()
 dictionary = list()
-termList = []
+urlTree = []
+termTree = []
 fetchedCount = 0
 totalCount = 0
 ###########https://docs.python.org/2/howto/logging.html
@@ -70,71 +68,60 @@ def getTermLinks( letter ):
     return fetchedCount
 
 def extractContent(idx):
- 	for termLink in dictionary[idx]:
+    for termLink in dictionary[idx]:
 
-		termUrl = baseUrl + termLink
-		# termUrl = "http://www.investopedia.com/terms/f/financial-account.asp"
-		
-		# write on a txt file
-		filePath = outDir + termUrl[len(baseUrl)+1:].replace('.asp', '.txt')
-		anchorFilePath = filePath.replace('.txt', '_IL.txt')
-		linkFilePath = filePath.replace('.txt', '_RT.txt')
+        termLeaf = {}
 
-		# print filePath
+        termUrl = baseUrl + termLink
+        # termUrl = "http://www.investopedia.com/terms/f/financial-account.asp"
 
-		targetDir = os.path.dirname(filePath)
-		if not os.path.exists(targetDir):
-		    os.makedirs(targetDir)
+        # extract definition and break down of term
+        soup = getSoup(termUrl)
 
-		f = codecs.open(filePath, encoding='utf-8', mode='w')
-		al = codecs.open(anchorFilePath, encoding='utf-8', mode='w')
-		fl = codecs.open(linkFilePath, encoding='utf-8', mode='w')
+        content = soup.find("div", class_="content-box content-box-term")
 
-		 # extract definition and break down of term
-		soup = getSoup(termUrl)
+        if content == None:
+        	continue
 
-		content = soup.find("div", class_="content-box content-box-term")
+        term = soup.h1.text.strip()
+        termLeaf['term'] = term
+        termLeaf['url'] = termUrl
+        urlTree.append({'term' : term, 'url' : termUrl})
+        print repr(term) + '\t' + repr(termUrl)
 
-		if content == None:
-			# logf.write(str('[Invalid Format#1!]' + termLink + '\n'))
-			f.close()
-			al.close()
-			fl.close()
-			continue
+        tags = content.find_all(['h2','p'])
 
-		term = soup.h1.text.strip()
-		termList.append({'term' : term, 'url' : termUrl})
+        anchorTerms = []
+        for tag in tags:
+        	if tag.name == 'p':
+				if tag == tags[1]:
+					termLeaf['definition'] = tag.text.strip()
+				else:
+					termLeaf['breakdown'] = tag.text.strip()
+				
+				anchorTermElements = tag.find_all('a')
+				for element in anchorTermElements:
+					anchorTerms.append({'term': element.text.strip(), 'url': "http://www.investopedia.com" + element['href']})
+					# print element.text
 
-		print repr(term) + '\t' + repr(termUrl)
+        termLeaf['anchorTerms'] = anchorTerms
 
-		tags = content.find_all(['h2','p'])
-		charCount = 0  # counts of characters in a paragraph
-		for tag in tags:
 
-			if tag.name == 'h2':
-				headText = '[ %s ]\n' % tag.text 
-				f.write(headText)
-				charCount += len(headText)
+        	
+        # extract related links
+        relatedTerms = []
+        try:
+        	relatedTermElements = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
+        	for element in relatedTermElements:
+        	    relatedTerms.append({'term': element.contents[0].strip(), 'url': "http://www.investopedia.com" + element['href']})
+        except AttributeError:
+        	pass
 
-			elif tag.name == 'p':
-				paraText = '%s\n' % tag.text
-				f.write(paraText)
-				charCount += len(paraText)
-				anchors = tag.find_all('a')
-				for anchor in anchors:
-					idxStart = charCount + tag.text.find(anchor.text)
-					anchorText = "%s  %s  %d\n" % (anchor.text, anchor.get("href"), idxStart)
-					al.write(anchorText)
+        termLeaf['relatedTerms'] = relatedTerms
 
-		
-		# extract related links
-		relatedLinks = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
-		for relatedLink in relatedLinks:
-		    fl.write(relatedLink.get("href") + '\n')
+        with lock:
+        	termTree.append(termLeaf)
 
-		f.close()
-		al.close()
-		fl.close()
 			
 def worker():
     while True:
@@ -182,10 +169,20 @@ for i in xrange(len(dictionary)):
 
 q2.join()
 
-flt = codecs.open(outDir + 'termlist.json', encoding='utf-8', mode='w+b')
-json.dump(termList, flt)
 
-flt.close()
+# dump data to json files
+os.chdir("../")
+
+# write url list
+furl = codecs.open('out/urlList.json', encoding='utf-8', mode='w+b')
+json.dump(urlTree, furl)
+furl.close()	
+
+
+# write term data
+fterm = codecs.open('out/term.json', encoding='utf-8', mode='w+b')
+json.dump(termTree, fterm)
+fterm.close()
 
 
 # print out result
