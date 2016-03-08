@@ -5,6 +5,7 @@ import requests
 import json
 import Queue
 import threading
+from time import sleep
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -12,14 +13,12 @@ from datetime import datetime
 # ------------Global variables
 # -----------------------------------------------------------------------------------
 baseUrl = "http://www.investopedia.com"
-# letterList = '1abcdefghijklmnopqrstuvwxyz'
-letterList = 'd'
+letterList = '1abcdefghijklmnopqrstuvwxyz'
 lock = threading.Lock()
 dictionary = list()
 urlTree = []
-termTree = []
+termTree = {}
 fetchedCount = 0
-###########https://docs.python.org/2/howto/logging.html
 
 # -----------------------------------------------------------------------------------
 # ------------Functions
@@ -68,8 +67,8 @@ def getTermLinks( letter ):
     return fetchedCount
 
 def extractContent(idx):
+    termLeaves = list()
     for termLink in dictionary[idx]:
-
         termLeaf = {}
 
         termUrl = baseUrl + termLink
@@ -118,12 +117,11 @@ def extractContent(idx):
 
 
         termLeaf['relatedTerms'] = relatedTerms
-
-        with lock:
-        	termTree.append(termLeaf)
-
+        termLeaves.append(termLeaf)
         sleep(1)	
 
+    with lock:
+        termTree[idx] = termLeaves
 			
 def worker():
     while True:
@@ -144,8 +142,9 @@ def worker2():
 q = Queue.Queue()
 q2 = Queue.Queue()
 num_worker_threads = 26
-# logf = codecs.open(outDir + 'log.txt', encoding='utf-8', mode='wa')
 
+###############################################
+# crawl url links
 for i in range(num_worker_threads):
      t = threading.Thread(target=worker)
      t.daemon = True
@@ -155,9 +154,11 @@ for letter in letterList:
     q.put(letter)
 
 q.join() 
-
-
 print "all links are fetched.\n"
+
+
+###############################################
+# crawl contents from each letter
 for i in range(num_worker_threads):
 	t = threading.Thread(target=worker2)
 	t.demon = True
@@ -168,7 +169,10 @@ for i in xrange(len(dictionary)):
 
 q2.join()
 
-print "all contents are fetched.\n"
+print "\nall contents are fetched.\n"
+
+
+###############################################
 # dump data to json files
 os.chdir("../")
 
@@ -178,11 +182,18 @@ json.dump(urlTree, furl)
 furl.close()	
 
 
+# sort term data
+termTreeArray = []
+for idx in xrange(len(letterList)):
+    for leaves in termTree[idx]:
+        termTreeArray.append(leaves)
+
 # write term data
 fterm = codecs.open('out/term.json', encoding='utf-8', mode='w+b')
-json.dump(termTree, fterm)
+json.dump(termTreeArray, fterm)
 fterm.close()
 
 
+##################################################
 # print out result
-print "\n# of fetched Pages: %d" % fetchedCount
+print "# of fetched Pages: %d" % fetchedCount
