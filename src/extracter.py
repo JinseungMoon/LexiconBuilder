@@ -12,13 +12,13 @@ from datetime import datetime
 # ------------Global variables
 # -----------------------------------------------------------------------------------
 baseUrl = "http://www.investopedia.com"
-letterList = '1abcdefghijklmnopqrstuvwxyz'
+# letterList = '1abcdefghijklmnopqrstuvwxyz'
+letterList = 'd'
 lock = threading.Lock()
 dictionary = list()
 urlTree = []
 termTree = []
 fetchedCount = 0
-totalCount = 0
 ###########https://docs.python.org/2/howto/logging.html
 
 # -----------------------------------------------------------------------------------
@@ -73,7 +73,7 @@ def extractContent(idx):
         termLeaf = {}
 
         termUrl = baseUrl + termLink
-        # termUrl = "http://www.investopedia.com/terms/f/financial-account.asp"
+        # termUrl = "http://www.investopedia.com/terms/c/cesar-alierta-izuel.asp"
 
         # extract definition and break down of term
         soup = getSoup(termUrl)
@@ -91,45 +91,44 @@ def extractContent(idx):
 
         tags = content.find_all(['h2','p'])
 
+        definition = ''
+        breakdown = ''
         anchorTerms = []
         for tag in tags:
         	if tag.name == 'p':
 				if tag == tags[1]:
-					termLeaf['definition'] = tag.text.strip()
+					definition += ''.join(tag.text)
 				else:
-					termLeaf['breakdown'] = tag.text.strip()
-				
+					breakdown += ''.join(tag.text)
 				anchorTermElements = tag.find_all('a')
 				for element in anchorTermElements:
 					anchorTerms.append({'term': element.text.strip(), 'url': "http://www.investopedia.com" + element['href']})
-					# print element.text
-
+		termLeaf['definition'] = definition.strip()
+		termLeaf['breakdown'] = breakdown.strip()
         termLeaf['anchorTerms'] = anchorTerms
 
 
         	
         # extract related links
         relatedTerms = []
-        try:
-        	relatedTermElements = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
-        	for element in relatedTermElements:
-        	    relatedTerms.append({'term': element.contents[0].strip(), 'url': "http://www.investopedia.com" + element['href']})
-        except AttributeError:
-        	pass
+
+    	relatedTermElements = soup.find("div", class_="box below-box col-2 no-image gray clear").find_all("a")
+    	for element in relatedTermElements:
+    	    relatedTerms.append({'term': element.contents[0].strip(), 'url': "http://www.investopedia.com" + element['href']})
+
 
         termLeaf['relatedTerms'] = relatedTerms
 
         with lock:
         	termTree.append(termLeaf)
 
+        sleep(1)	
+
 			
 def worker():
     while True:
         letter = q.get()
         fetchedCount = getTermLinks(letter)
-        with lock:
-			global totalCount
-			totalCount += fetchedCount
         q.task_done()
 
 def worker2():
@@ -169,7 +168,7 @@ for i in xrange(len(dictionary)):
 
 q2.join()
 
-
+print "all contents are fetched.\n"
 # dump data to json files
 os.chdir("../")
 
@@ -187,4 +186,3 @@ fterm.close()
 
 # print out result
 print "\n# of fetched Pages: %d" % fetchedCount
-print "# of written Pages: %d" % totalCount

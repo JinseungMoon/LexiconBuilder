@@ -115,13 +115,6 @@ public class IndexManager {
         	termDataList = mapper.readValue(new File(termFilePath), new TypeReference<List<TermData>>(){});
     		urlDataList = mapper.readValue(new File(urlFilePath), new TypeReference<List<UrlData>>(){});
     		
-//    		for( int i = 0; i < termDataList.size() ; i++){
-//    			if( termDataList.get(i).getRelatedTerms() != null)
-//    				System.out.println(termDataList.get(i).getRelatedTerms()[0].getTerm());	 
-//    		}
-//    		
-    		
-    		
         } catch (Exception e) {
             System.err.println("Error opening." + e.getMessage());
         }
@@ -156,6 +149,8 @@ public class IndexManager {
 	    indexWriter.commit();
         indexWriter.close();
 	
+        System.out.println("[INFO] "+ termDataList.size() + " fields from json file are indexed.");
+        
         return termDataList.size();
     }
     
@@ -172,6 +167,7 @@ public class IndexManager {
 		reader = DirectoryReader.open(index);
         searcher = new IndexSearcher(reader);
         
+        System.out.println("[INFO] "+ "adding missing links in process.");
 		int count = 0;
 		for(TermData t : termDataList){	
 			for( UrlData u  : urlDataList ){
@@ -203,7 +199,7 @@ public class IndexManager {
 		}
 		
 		mapper.writeValue(new File( this.termFilePath.replace(".json", "-modified.json")), termDataList);
-		System.out.println(count + " missing links added.");
+		System.out.println("[INFO] "+ count + " missing links added.");
      
         return true;
 	}    
